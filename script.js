@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cupomText += `Pedido gerado em: ${dataFormatada} ${horaFormatada}`;
 
         // Codifica o texto do cupom em Base64 para passar pela URL
-        const cupomBase64 = btoa(cupomText);
+        const cupomBase64 = btoa(unescape(encodeURIComponent(cupomText)));
 
         // Gera o link de impressão
         const urlImpressao = `${window.location.origin}${window.location.pathname.replace('index.html', '')}print.html?data=${cupomBase64}`;
