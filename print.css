@@ -1,0 +1,40 @@
+/* print.css */
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    pre {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+pre {
+    width: 302px; /* Largura para papel de 80mm */
+    padding: 15px;
+    background-color: #fff;
+    border: 1px dashed #ccc;
+    font-size: 12px; /* Tamanho de fonte comum para recibos */
+    line-height: 1.4;
+    white-space: pre-wrap; /* Garante que o texto quebre a linha */
+    word-wrap: break-word;
+}
+
+/* Para impressoras de 58mm, pode-se usar uma media query */
+/* 
+@media (max-width: 220px) {
+    pre {
+        width: 219px; 
+    }
+}
+*/

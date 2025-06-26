@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cantina - Faça seu Pedido</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cantina Virtual</h1>
+            <p>Monte seu pedido e envie diretamente pelo WhatsApp.</p>
+        </header>
+
+        <main>
+            <section id="menu-section">
+                <h2>Cardápio do Dia</h2>
+                <div id="menu-items">
+                    <!-- Pratos serão carregados aqui via JavaScript -->
+                </div>
+            </section>
+
+            <section id="pedido-section">
+                <h2>Seu Pedido</h2>
+                <div id="pedido-resumo">
+                    <ul id="lista-pedido">
+                        <li id="pedido-vazio">Seu carrinho está vazio.</li>
+                    </ul>
+                    <p class="total">Total: <span id="total-pedido">R$ 0,00</span></p>
+                </div>
+
+                <div class="dados-cliente">
+                    <h3>Complete para Enviar</h3>
+                    <div class="form-group">
+                        <label for="nome-cliente">Seu Nome</label>
+                        <input type="text" id="nome-cliente" placeholder="Digite seu nome completo" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="horario-cliente">Horário de Retirada</label>
+                        <input type="text" id="horario-cliente" placeholder="Ex: 12:30" required>
+                    </div>
+                </div>
+
+                <button id="enviar-whatsapp">
+                    <img src="https://static-00.iconduck.com/assets.00/whatsapp-icon-2048x2048-64vbwz3p.png" alt="WhatsApp Icon" width="24" height="24">
+                    Finalizar e Enviar Pedido
+                </button>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Cantina Virtual. Todos os direitos reservados.</p>
+            <a href="login.html" class="nav-link">Área Administrativa</a>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

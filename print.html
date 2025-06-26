@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Imprimir Pedido</title>
+    <link rel="stylesheet" href="print.css">
+</head>
+<body>
+    <pre id="receipt-content"></pre>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const receiptContentEl = document.getElementById('receipt-content');
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = urlParams.get('data');
+
+            if (data) {
+                try {
+                    // Decodifica a string Base64 para o texto original
+                    const decodedText = atob(data);
+                    receiptContentEl.textContent = decodedText;
+                    
+                    // Aciona a impressão automaticamente
+                    window.print();
+                } catch (e) {
+                    receiptContentEl.textContent = 'Erro ao decodificar os dados do pedido.';
+                    console.error("Erro de decodificação:", e);
+                }
+            } else {
+                receiptContentEl.textContent = 'Nenhum dado de pedido recebido.';
+            }
+        });
+    </script>
+</body>
+</html>

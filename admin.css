@@ -1,0 +1,53 @@
+/* admin.css */
+
+#lista-pratos-admin .prato-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+#lista-pratos-admin .prato-info {
+    flex-grow: 1;
+}
+
+#lista-pratos-admin .prato-info h3 {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+#lista-pratos-admin .prato-info .price {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+#lista-pratos-admin .delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#lista-pratos-admin .delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.nav-link {
+    display: inline-block;
+    margin-top: 20px;
+    text-align: center;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
+}
