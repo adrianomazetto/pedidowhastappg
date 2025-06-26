@@ -9,14 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const pedidoVazioEl = document.getElementById('pedido-vazio');
 
     // Estado da aplicação
-    // Carrega o menu do localStorage ou define um array padrão se estiver vazio
-    let menu = JSON.parse(localStorage.getItem('menu')) || [
-        { id: 1, nome: 'Prato Feito (Carne)', preco: 22.00 },
-        { id: 2, nome: 'Prato Feito (Frango)', preco: 20.00 },
-        { id: 3, nome: 'Marmita Fitness', preco: 28.50 },
-        { id: 4, nome: 'Salada Caesar', preco: 18.00 },
-    ];
+    let menu = []; // O menu agora será carregado do Supabase
     let pedido = [];
+
+    // Função para carregar o cardápio do Supabase
+    async function carregarMenu() {
+        const { data, error } = await supabase
+            .from('pratos')
+            .select('id, nome, preco')
+            .order('nome', { ascending: true });
+
+        if (error) {
+            console.error('Erro ao carregar o cardápio:', error);
+            menuItemsContainer.innerHTML = '<p>Não foi possível carregar o cardápio. Tente novamente mais tarde.</p>';
+            return;
+        }
+        menu = data;
+        renderizarMenu();
+    }
 
     // Função para renderizar o cardápio
     function renderizarMenu() {
@@ -170,6 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Renderização inicial
-    renderizarMenu();
+    carregarMenu();
     renderizarPedido();
 });
