@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function carregarMenu() {
         const { data, error } = await supabase
             .from('pratos')
-            .select('id, nome, preco')
+            .select('id, nome, preco, foto_url')
             .order('nome', { ascending: true });
 
         if (error) {
@@ -39,9 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const menuItemEl = document.createElement('div');
             menuItemEl.classList.add('menu-item');
             menuItemEl.innerHTML = `
-                <h3>${item.nome}</h3>
-                <p class="price">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
-                <button data-id="${item.id}">Adicionar ao Pedido</button>
+                <img src="${item.foto_url}" alt="${item.nome}" class="menu-item-img">
+                <div class="menu-item-content">
+                    <h3>${item.nome}</h3>
+                    <p class="price">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+                    <button data-id="${item.id}">Adicionar ao Pedido</button>
+                </div>
             `;
             menuItemsContainer.appendChild(menuItemEl);
         });

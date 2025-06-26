@@ -118,14 +118,26 @@ button:hover {
 
 .menu-item {
     background: #fff;
-    padding: 15px;
+    padding: 0; /* Removido para a imagem preencher o topo */
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow: hidden; /* Garante que a imagem não saia do card */
 }
+
+.menu-item-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.menu-item-content {
+    padding: 15px;
+}
+
 
 .menu-item h3 {
     margin: 0 0 10px 0;

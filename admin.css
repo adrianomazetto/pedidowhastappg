@@ -9,6 +9,15 @@
     border-radius: 8px;
     margin-bottom: 10px;
     background-color: #fff;
+    gap: 15px; /* Adiciona espaço entre os elementos */
+}
+
+#lista-pratos-admin .prato-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #eee;
 }
 
 #lista-pratos-admin .prato-info {

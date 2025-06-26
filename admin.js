@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const formCadastro = document.getElementById('form-cadastro');
     const listaPratosContainer = document.getElementById('lista-pratos-admin');
+    const BUCKET_NAME = 'fotos-pratos';
 
     // Função para buscar e renderizar os pratos do Supabase
     async function carregarPratos() {
@@ -25,11 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const pratoItemEl = document.createElement('div');
             pratoItemEl.classList.add('prato-item');
             pratoItemEl.innerHTML = `
+                <img src="${item.foto_url}" alt="${item.nome}" class="prato-img">
                 <div class="prato-info">
                     <h3>${item.nome}</h3>
                     <span class="price">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
                 </div>
-                <button class="delete-btn" data-id="${item.id}">Excluir</button>
+                <button class="delete-btn" data-id="${item.id}" data-foto-url="${item.foto_url}">Excluir</button>
             `;
             listaPratosContainer.appendChild(pratoItemEl);
         });
@@ -40,40 +42,76 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const nomePrato = document.getElementById('nome-prato').value;
         const precoPrato = parseFloat(document.getElementById('preco-prato').value);
+        const fotoInput = document.getElementById('foto-prato');
+        const fotoFile = fotoInput.files[0];
 
-        if (nomePrato && !isNaN(precoPrato)) {
-            const { error } = await supabase
-                .from('pratos')
-                .insert([{ nome: nomePrato, preco: precoPrato }]);
+        if (!nomePrato || isNaN(precoPrato) || !fotoFile) {
+            alert('Por favor, preencha todos os campos, incluindo a foto.');
+            return;
+        }
 
-            if (error) {
-                console.error('Erro ao cadastrar prato:', error);
-                alert('Falha ao cadastrar o prato.');
-            } else {
-                formCadastro.reset();
-                await carregarPratos(); // Recarrega a lista
-            }
+        // 1. Fazer upload da foto
+        const filePath = `public/${Date.now()}-${fotoFile.name}`;
+        const { error: uploadError } = await supabase.storage
+            .from(BUCKET_NAME)
+            .upload(filePath, fotoFile);
+
+        if (uploadError) {
+            console.error('Erro no upload:', uploadError);
+            alert('Falha ao enviar a foto.');
+            return;
+        }
+
+        // 2. Obter a URL pública da imagem
+        const { data: urlData } = supabase.storage
+            .from(BUCKET_NAME)
+            .getPublicUrl(filePath);
+
+        // 3. Salvar os dados no banco de dados
+        const { error: insertError } = await supabase
+            .from('pratos')
+            .insert([{ nome: nomePrato, preco: precoPrato, foto_url: urlData.publicUrl }]);
+
+        if (insertError) {
+            console.error('Erro ao cadastrar prato:', insertError);
+            alert('Falha ao cadastrar o prato no banco de dados.');
         } else {
-            alert('Por favor, preencha os dados do prato corretamente.');
+            formCadastro.reset();
+            await carregarPratos();
         }
     });
 
-    // Evento: Excluir prato
+    // Evento: Excluir prato e foto
     listaPratosContainer.addEventListener('click', async (e) => {
         if (e.target.classList.contains('delete-btn')) {
             const itemId = parseInt(e.target.getAttribute('data-id'));
+            const fotoUrl = e.target.getAttribute('data-foto-url');
             
-            const { error } = await supabase
+            // 1. Excluir a referência do banco de dados
+            const { error: dbError } = await supabase
                 .from('pratos')
                 .delete()
                 .eq('id', itemId);
 
-            if (error) {
-                console.error('Erro ao excluir prato:', error);
-                alert('Falha ao excluir o prato.');
-            } else {
-                await carregarPratos(); // Recarrega a lista
+            if (dbError) {
+                console.error('Erro ao excluir do DB:', dbError);
+                alert('Falha ao excluir o prato do banco de dados.');
+                return;
             }
+
+            // 2. Excluir o arquivo do Storage
+            if (fotoUrl) {
+                const filePath = fotoUrl.split('/').pop(); // Extrai o nome do arquivo da URL
+                const { error: storageError } = await supabase.storage
+                    .from(BUCKET_NAME)
+                    .remove([`public/${filePath}`]);
+                
+                if (storageError) {
+                     console.error('Erro ao excluir foto do Storage:', storageError);
+                }
+            }
+
+            await carregarPratos();
         }
     });
 
