@@ -178,12 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Codifica a mensagem para URL e abre o link do WhatsApp
         const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-        
-        window.open(linkWhatsApp, '_blank');
-
-        // Codifica a mensagem para URL e abre o link do WhatsApp
-        const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-        
         window.open(linkWhatsApp, '_blank');
     });
 
